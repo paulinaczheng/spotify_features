@@ -1,22 +1,28 @@
+from __init__ import db
+
 class Artist(db.Model):
     __tablename__= 'artists'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=False)
-    name = db.Column(db.String(100), nullable=False)
-    artist_popularity = db.Column(db.Integer, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    spotify_id = db.Column(db.String(100))
+    name = db.Column(db.String(100))
+    artist_popularity = db.Column(db.Integer)
+    followers = db.Column(db.Integer)
     tracks = db.relationship('Track', back_populates='artist')
     albums = db.relationship('Album', back_populates='artist')
     genres = db.relationship('Genre', secondary='artist_genres', back_populates='artists')
 
 class Track(db.Model):
-    __tablename__ = 'tracks '
-    id = db.Column(db.Integer, primary_key=True, autoincrement=False)
-    name = db.Column(db.String(100), nullable=False)
-    track_popularity = db.Column(db.Integer, nullable=False)
-    release_date = db.Column(db.Date, nullable=False)
+    __tablename__ = 'tracks'
+    id = db.Column(db.Integer, primary_key=True)
+    spotify_id = db.Column(db.String(100))
+    name = db.Column(db.String(100))
+    track_popularity = db.Column(db.Integer)
+    release_date = db.Column(db.Date)
     album_id = db.Column(db.Integer, db.ForeignKey('albums.id'))
     album = db.relationship('Album', back_populates='tracks')
     artist_id = db.Column(db.Integer, db.ForeignKey('artists.id'))
     artist = db.relationship('Artist', back_populates='tracks')
+    featured_artist = db.Column(db.Boolean)
     features = db.relationship('Feature', secondary='track_features', back_populates='tracks')
     playlists = db.relationship('Playlist', secondary='playlist_tracks', back_populates='tracks')
     genres = db.relationship('Genre', secondary='track_genres', back_populates='tracks')
@@ -25,20 +31,21 @@ class Feature(db.Model):
     __tablename__ = 'features'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    value = db.Column(db.Integer, nullable=False)
     tracks = db.relationship('Track', secondary='track_features', back_populates='features')
 
 class Album(db.Model):
     __tablename__ = 'albums'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=False)
-    name = db.Column(db.String(100), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    spotify_id = db.Column(db.String(100))
+    name = db.Column(db.String(100))
     tracks = db.relationship('Track', back_populates='album')
-    artist_id = db.Column(db.Integer, ForeignKey('artists.id'))
+    artist_id = db.Column(db.Integer, db.ForeignKey('artists.id'))
     artist = db.relationship('Artist', back_populates='albums')
 
 class Playlist(db.Model):
     __tablename__= 'playlists'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=False)
+    id = db.Column(db.Integer, primary_key=True)
+    spotify_id = db.Column(db.String(100))
     name = db.Column(db.String(100), nullable=False)
     genre_id = db.Column(db.Integer, db.ForeignKey('genres.id'))
     genre = db.relationship('Genre', back_populates='playlists')
@@ -46,11 +53,11 @@ class Playlist(db.Model):
 
 class Genre(db.Model):
     __tablename__= 'genres'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=False)
-    name = db.Column(db.String(100), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
     playlists = db.relationship('Playlist', back_populates='genre')
     artists = db.relationship('Artist', secondary='artist_genres', back_populates='genres')
-    songs = db.relationship('Track', secondary='track_genres', back_populates='genres')
+    tracks = db.relationship('Track', secondary='track_genres', back_populates='genres')
 
 class ArtistGenre(db.Model):
     __tablename__= 'artist_genres'
@@ -75,3 +82,6 @@ class TrackFeature(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     track_id = db.Column(db.Integer, db.ForeignKey('tracks.id'))
     feature_id = db.Column(db.Integer, db.ForeignKey('features.id'))
+    value = db.Column(db.Integer)
+
+db.create_all()
