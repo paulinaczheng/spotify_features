@@ -9,7 +9,8 @@ class Artist(db.Model):
     followers = db.Column(db.Integer)
     tracks = db.relationship('Track', back_populates='artist')
     albums = db.relationship('Album', back_populates='artist')
-    genres = db.relationship('Genre', secondary='artist_genres', back_populates='artists')
+    genre = db.relationship('Genre', back_populates='artists')
+    genre_id = db.Column(db.Integer, db.ForeignKey('genres.id'))
 
 class Track(db.Model):
     __tablename__ = 'tracks'
@@ -17,15 +18,16 @@ class Track(db.Model):
     spotify_id = db.Column(db.String(100))
     name = db.Column(db.String(100))
     track_popularity = db.Column(db.Integer)
-    release_date = db.Column(db.Date)
     album_id = db.Column(db.Integer, db.ForeignKey('albums.id'))
     album = db.relationship('Album', back_populates='tracks')
     artist_id = db.Column(db.Integer, db.ForeignKey('artists.id'))
     artist = db.relationship('Artist', back_populates='tracks')
     featured_artist = db.Column(db.Boolean)
+    top_track = db.Column(db.Boolean)
     features = db.relationship('Feature', secondary='track_features', back_populates='tracks')
     playlists = db.relationship('Playlist', secondary='playlist_tracks', back_populates='tracks')
-    genres = db.relationship('Genre', secondary='track_genres', back_populates='tracks')
+    genre_id = db.Column(db.Integer, db.ForeignKey('genres.id'))
+    genre = db.relationship('Genre', back_populates='tracks')
 
 class Feature(db.Model):
     __tablename__ = 'features'
@@ -38,6 +40,7 @@ class Album(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     spotify_id = db.Column(db.String(100))
     name = db.Column(db.String(100))
+    release_date = db.Column(db.String(100))
     tracks = db.relationship('Track', back_populates='album')
     artist_id = db.Column(db.Integer, db.ForeignKey('artists.id'))
     artist = db.relationship('Artist', back_populates='albums')
@@ -56,20 +59,8 @@ class Genre(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     playlists = db.relationship('Playlist', back_populates='genre')
-    artists = db.relationship('Artist', secondary='artist_genres', back_populates='genres')
-    tracks = db.relationship('Track', secondary='track_genres', back_populates='genres')
-
-class ArtistGenre(db.Model):
-    __tablename__= 'artist_genres'
-    id = db.Column(db.Integer, primary_key=True)
-    artist_id = db.Column(db.Integer, db.ForeignKey('artists.id'))
-    genre_id = db.Column(db.Integer, db.ForeignKey('genres.id'))
-
-class TrackGenre(db.Model):
-    __tablename__= 'track_genres'
-    id = db.Column(db.Integer, primary_key=True)
-    track_id = db.Column(db.Integer, db.ForeignKey('tracks.id'))
-    genre_id = db.Column(db.Integer, db.ForeignKey('genres.id'))
+    artists = db.relationship('Artist', back_populates='genre')
+    tracks = db.relationship('Track', back_populates='genre')
 
 class PlaylistTrack(db.Model):
     __tablename__= 'playlist_tracks'
@@ -83,5 +74,7 @@ class TrackFeature(db.Model):
     track_id = db.Column(db.Integer, db.ForeignKey('tracks.id'))
     feature_id = db.Column(db.Integer, db.ForeignKey('features.id'))
     value = db.Column(db.Integer)
+    track = db.relationship(Track, backref=db.backref('track_features', cascade='all, delete-orphan'))
+    feature = db.relationship(Feature, backref=db.backref('track_features', cascade='all, delete-orphan'))
 
 db.create_all()
