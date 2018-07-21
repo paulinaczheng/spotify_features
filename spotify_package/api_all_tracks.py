@@ -2,6 +2,7 @@ from config import *
 from models import *
 from api_artists_genres import *
 from api_top_tracks import *
+#Headers for Spotify API
 
 list_of_apis = []
 def url_of_track_ids(a,b):
@@ -22,7 +23,7 @@ for url_list in list_of_apis:
 song_name_artists = {track['id']:[artist['name'] for artist in track['artists']] for track in final_all_tracks}
 song_name_artists['0nhVrTiCGiGRCoZOJiWzm1'][0] = 'Migos_Filler'
 
-track_artist = [] #for every track, their artist
+ #for every track, their artist
 #returns list of songs with a featured artist
 def track_feature(song_name_artists):
     songs_with_feat_artist = []
@@ -31,8 +32,6 @@ def track_feature(song_name_artists):
             songs_with_feat_artist.append(key)
         track_artist.append((key, value[0]))
     return songs_with_feat_artist
-
-songs_with_feat_artist = track_feature(song_name_artists)
 
 def check_featured_artist(songs_with_feat_artist, spotify_id):
     for track in songs_with_feat_artist:
@@ -66,7 +65,6 @@ def return_genre_id(genre):
     else:
         return genre.id
 
-all_track_objs = []
 def track_objects(final_all_tracks, track_artist, all_artists):
     for track in final_all_tracks:
         spotify_id = track['id']
@@ -81,11 +79,14 @@ def track_objects(final_all_tracks, track_artist, all_artists):
         all_track_objs.append(Track(spotify_id=spotify_id, name=name, track_popularity=track_popularity, featured_artist=featured_artist, top_track=top_track, artist=artist, artist_id=artist_id, genre=genre, genre_id=genre_id))
     return all_track_objs
 
-track_objects(final_all_tracks, track_artist, all_artists)
-
+#All tracks
 def add_track_objects(all_track_objs):
     for track in all_track_objs:
         db.session.add(track)
         db.session.commit()
 
+track_artist = []
+songs_with_feat_artist = track_feature(song_name_artists)
+all_track_objs = []
+track_objects(final_all_tracks, track_artist, all_artists)
 add_track_objects(all_track_objs)

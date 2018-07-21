@@ -1,65 +1,61 @@
-#Create genres for artists
-all_genres = []
-def find_or_create_genre(genre_list):
-    genre_objs = []
-    for genre in genre_list:
-        for instance in all_genres:
-            if genre != instance.name:
-                all_genres.append(Genre(name=genre))
-                genre_objs.append(Genre(name=genre))
-            else:
-                genre_objs.append(instance)
-    return genre_objs
+from api_track_features import *
 
-#Get genre names
-def genre_names(all_genres):
-    return [genre.name for genre in all_genres]
+#converts artist object to artist name
+for artist in Artist.query.all():
+    if artist.name == 'Migos':
+        migos = artist
+    elif artist.name == 'Marshmello':
+        marshmello = artist
+    elif artist.name == 'Charlie Puth':
+        puth = artist
 
-#Get Several Artists
-all_artists = []
-def artist(data):
-    for item in data:
-        name = item['name']
-        spotify_id = item['id']
-        popularity = item['popularity']
-        followers = item['followers']['total']
-        genres = item['genres']
-        genre_objects = find_or_create_genre(genres)
-        all_artists.append(Artist(spotify_id=spotify_id, name=name, popularity=popularity, followers=followers, genres = genre_objects))
-    return all_artists
+def artist_name_by_obj(artist_object):
+    for artist in Artist.query.all():
+        if artist_object == artist:
+            name = artist.name
+            return name
+#return list of tuples for all artist, track pairs
+def all_track_names_artist():
+    return [(track.name, artist_name_by_obj(track.artist)) for track in  Track.query.all()]
 
-#Get artist top tracks
-all_track_ids = []
-all_album_ids = []
-def artist_top_tracks(data):
-    #local variable, artist-dependent
-    top_track_names = []
-    for item in data:
-        top_track_names.append(item['name'])
-        all_track_ids.append(item['id'])
-        #check to see if album isn't already in all_album_ids list before adding to the list:
-        if item['album']['id'] not in all_album_ids:
-            all_album_ids.append(item['album']['id'])
-    return top_track_names
+def track_obj_by_name(name):
+    return [track for track in Track.query.all() if track.name == name][0]
 
-#Get album tracks
-def album_tracks(data):
-    for item in data:
-        #check if track_id isn't already in all_track_ids before adding to list:
-        if item['id'] not in all_track_ids:
-            all_track_ids.append(item['id'])
-    return all_track_ids #don't need to
+def feature_name_by_id(id):
+    return [feature.name for feature in Feature.query.all() if feature.id == id][0]
 
-#Get first category playlist id
-playlist_ids = []
-def category_playlist(data):
-    if data[0]['id'] not in playlist_ids:
-        playlist_ids.append(data[0]['id'])
-    return playlist_ids #don't need to
+def pull_track_features_by_track(name):
+   obj = track_obj_by_name(name)
+   obj_id = obj.id
+   return [(feature_name_by_id(trackfeature.feature_id) ,trackfeature.value) for trackfeature in TrackFeature.query.all() if trackfeature.track_id == obj_id]
 
-#Get playlist tracks
-def playlist_tracks(data):
-    for item in data:
-        if item['track']['id'] not in all_track_ids:
-            all_track_ids.append(item['track']['id'])
-    return all_track_ids #don't need to
+def tracks_for_artist(artist_name):
+    tracks = []
+    for pair in all_track_names_artist():
+        if pair[1] == artist_name:
+            tracks.append(pair[0])
+    return tracks
+
+def all_featurevalue_artist(artist):
+    feature_values = []
+    artist_tracks = tracks_for_artist(artist)
+    for track in artist_tracks:
+        feature_values.append({track:pull_track_features_by_track(track)})
+    return feature_values
+
+def feature_values_average(feature, artist):
+    dict_values = [value for value in all_featurevalue_artist(artist)]
+    feature_values_list = [tup[1] for item in dict_values for value in item.values() for tup in value if tup[0] == feature]
+    return sum(feature_values_list)/len(feature_values_list)
+
+def feature_names():
+    return [feature.name for feature in Feature.query.all()]
+
+def avg_featurevalues_artist(artist, feature_names_list):
+    return {feature: feature_values_average(feature, artist) for feature in feature_names_list}
+
+def track_popularity(all_track_objs):
+    return [{track.name: track.track_popularity} for track in Track.query.all()]
+
+def create_trace():
+    pass

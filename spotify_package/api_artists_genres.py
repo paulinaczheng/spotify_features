@@ -6,7 +6,6 @@ def url_of_artist_ids():
     merge = '%2C'.join(x)
     return "https://api.spotify.com/v1/artists" + "?ids=" + merge
 
-#to call API for all artists
 response_artists = requests.get(url_of_artist_ids(), headers=headers)
 artists_raw = json.loads(response_artists.content)
 artists_clean = [artist for artist in artists_raw['artists']]
@@ -17,6 +16,7 @@ def get_all_genres():
     response_genres = requests.get(url_genres_all, headers=headers)
     genres_raw = json.loads(response_genres.content)
     return [Genre(name=genre['id']) for genre in genres_raw['categories']['items']]
+
 all_genres = get_all_genres()
 
 #Create genres for artists
@@ -35,7 +35,6 @@ def find_or_create_genre(genre_name):
             return item
 
 #Get Several Artists
-all_artists = []
 def artist(data):
     for item in data:
         name = item['name']
@@ -47,18 +46,17 @@ def artist(data):
         all_artists.append(Artist(spotify_id=spotify_id, name=name, artist_popularity=popularity, followers=followers, genre = genre))
     return all_artists
 
-artist(artists_clean)
-
 def add_artists(all_artists):
     for artist in all_artists:
         db.session.add(artist)
         db.session.commit()
-
-add_artists(all_artists)
 
 def add_genres(all_genres):
     for genre in all_genres:
         db.session.add(genre)
         db.session.commit()
 
+all_artists = []
+artist(artists_clean)
+add_artists(all_artists)
 add_genres(all_genres)

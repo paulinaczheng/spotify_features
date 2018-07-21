@@ -1,13 +1,15 @@
-from config import *
-from models import *
-from api_artists_genres import *
-from api_top_tracks import *
+# from config import *
+# from models import *
+# from api_artists_genres import *
+# from api_top_tracks import *
 from api_all_tracks import *
 
 def url_features(a,b):
     merge = '%2C'.join(list_all_tracks()[a:b])
     feature_apis.append("https://api.spotify.com/v1/audio-features" + "?ids=" + merge)
     return feature_apis
+url_features(0,50)
+url_features(50,100)
 
 def features_dict():
     features_dicts = []
@@ -48,20 +50,3 @@ def track_features(all_features, all_features_dict, all_track_objs, feature_list
             track.track_features.append(track_feature)
             track_features_list.append(track_feature)
     return track_features_list
-
-def add_track_features(track_features_list):
-    for track_feature in track_features_list:
-        db.session.add(track_feature)
-        db.session.commit()
-
-feature_apis = []
-url_features(0,50)
-url_features(50,100)
-all_features_dict = features_dict()
-feature_list = ['danceability', 'energy', 'key', 'loudness', 'mode', 'speechiness', 'acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo']
-all_features = []
-feature_objs(feature_list)
-add_features(all_features)
-track_features_list = []
-track_features(all_features, all_features_dict, all_track_objs, feature_list)
-add_track_features(track_features_list)
