@@ -1,6 +1,4 @@
 from spotify_package.api_track_features import *
-from collections import defaultdict
-
 #converts artist object to artist name
 for artist in Artist.query.all():
     if artist.name == 'Migos':
@@ -84,5 +82,31 @@ def create_trace(artist, feature, title, marker, top_track=False):
     text = [dict['name'] for dict in feature_dict]
     return dict(x=x, y=y, name=title, mode='markers', marker=marker, text=text)
 
-all_track_artists = all_track_names_artist()
-feature_names_list = feature_names()
+marker1 = dict(
+size = 20,
+color = 'green',)
+marker2 = dict(
+size = 20,
+color = 'blue',
+line = dict(
+width = 2,))
+
+def top_track_title(artist, feature):
+    return artist + ' ' + 'Top Tracks by ' + feature
+
+def oth_track_title(artist, feature):
+    return artist + ' ' + 'Other Tracks by ' + feature
+
+def list_of_traces(artist_name):
+    top_track_trace_list = []
+    oth_track_trace_list = []
+    artist_names = [artist.name for artist in Artist.query.all() if artist.name == artist_name]
+    feature_names = [feature.name for feature in Feature.query.all()]
+    for artist in artist_names:
+        for feature in feature_names:
+            top_track_name = top_track_title(artist, feature)
+            oth_track_name = oth_track_title(artist, feature)
+            top_track_trace_list.append(create_trace(artist, feature, top_track_name , marker1, top_track=True))
+            oth_track_trace_list.append(create_trace(artist, feature, oth_track_name, marker2))
+    final_trace_list = [top_track_trace_list, oth_track_trace_list]
+    return final_trace_list

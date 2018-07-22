@@ -11,9 +11,7 @@ size = 20,
 color = 'blue',
 line = dict(
 width = 2,))
-marker3 = dict(
-size = 20,
-color = 'green',)
+
 trace1 = create_trace('Charlie Puth', 'danceability', 'Puth top tracks danceability', marker1, top_track=True)
 trace2 = create_trace('Charlie Puth', 'danceability', 'Puth other tracks danceability', marker2)
 trace3 = create_trace('Charlie Puth', 'valence', 'Puth top tracks valence', marker1, top_track=True)
