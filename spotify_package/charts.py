@@ -88,7 +88,7 @@ dict(label = 'All',
 # bgcolor = 'white',
 # bordercolor = 'white',
 # fontcolor = 'black',
-font = dict(size=20),
+font = dict(size=16),
 #     buttons=list([
 #     dict(args=['type', 'surface'],
 #         label='Migos',

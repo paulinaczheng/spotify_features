@@ -57,10 +57,8 @@ def feature_values_average(feature, artist):
 def feature_names():
     return [feature.name for feature in Feature.query.all()]
 
-def avg_featurevalues_artist(artist, feature_names_list):
-    return {feature: feature_values_average(feature, artist) for feature in feature_names_list}
-
-def avg_featurevalues_artist(artist, feature_names_list):
+def avg_featurevalues_artist(artist):
+    feature_names_list = feature_names()
     return {feature: feature_values_average(feature, artist) for feature in feature_names_list}
 
 # def test():
@@ -101,34 +99,34 @@ def create_trace(artist, feature, title, marker, top_track=False):
     return dict(x=x, y=y, name=title, mode='markers', marker=marker, text=text)
 
 marker1 = dict(
-size = 20,
+size = 16,
 color = 'green',)
 marker2 = dict(
-size = 20,
+size = 16,
 color = 'blue',
 line = dict(
 width = 2,))
 
 def top_track_title(feature):
-    return 'Top Tracks by ' + feature.capitalize()
+    return 'Top Tracks by ' + feature
 
 def oth_track_title(feature):
-    return 'Other Tracks by ' + feature.capitalize()
+    return 'Other Tracks by ' + feature
 
 def list_of_traces(artist):
     top_track_trace_list = []
     oth_track_trace_list = []
     feature_names = [feature.name for feature in Feature.query.all()]
     for feature in feature_names:
-        top_track_name = top_track_title(artist)
-        oth_track_name = oth_track_title(artist)
+        top_track_name = top_track_title(feature)
+        oth_track_name = oth_track_title(feature)
         top_track_trace_list.append(create_trace(artist, feature, top_track_name , marker1, top_track=True))
         oth_track_trace_list.append(create_trace(artist, feature, oth_track_name, marker2))
     final_trace_list = [top_track_trace_list, oth_track_trace_list]
     return final_trace_list
 
 def list_of_artists_for_dropdown():
-    options = [{'label': 'Artist', 'value': 'Artist'}]
+    options = [{'label': 'All Artists', 'value': 'all_artists'}]
     artist_list = [artist.name for artist in Artist.query.all()]
     for artist in artist_list:
         options.append({'label': artist, 'value': artist})
