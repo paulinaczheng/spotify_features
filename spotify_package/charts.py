@@ -1,60 +1,35 @@
 import plotly.plotly as py
 import plotly.graph_objs as go
 import numpy as np
+from spotify_package.etl import *
 
-trace_dance_top = go.Scatter(
-x = [.5, .6, .7,.8],
-y = [90, 100, 82, 77],
-name = 'Top Tracks',
-mode = 'markers',
-marker = dict(
+marker1 = dict(
 size = 20,
-color = 'green',
-
-),
-text = ['Narcos', 'Motorsport', 'Stir Fry']
-)
-
-trace_dance = go.Scatter(
-x = [.3, .98, .7,.10],
-y = [65, 77, 60, 70],
-name = 'Other Tracks',
-mode = 'markers',
-marker = dict(
+color = 'green',)
+marker2 = dict(
 size = 20,
 color = 'blue',
 line = dict(
-width = 2,
-)
-),
-text = ['Other', 'Other2', 'Other3']
+width = 2,))
+marker3 = dict(
+size = 20,
+color = 'green',)
+trace1 = create_trace('Charlie Puth', 'danceability', 'Puth danceability', marker1)
+trace2 = create_trace('Migos', 'danceability', 'Migos danceability', marker2)
+trace3 = create_trace('Charlie Puth', 'valence', 'Puth valence', marker1)
+trace4 = create_trace('Migos', 'valence', 'Migos valence', marker2)
+trace_dance_top = go.Scatter(
+trace1)
+
+trace_dance = go.Scatter(
+trace2
 )
 trace_pitch_top = go.Scatter(
-x = [.55, .20, .1,.8],
-y = [90, 100, 82, 77],
-name = 'Top Tracks',
-mode = 'markers',
-marker = dict(
-size = 20,
-color = 'green',
-
-),
-text = ['Narcos', 'Motorsport', 'Stir Fry']
+trace3
 )
 
 trace_pitch = go.Scatter(
-x = [.8, .5, .03,.60],
-y = [65, 77, 60, 70],
-name = 'Other Tracks',
-mode = 'markers',
-marker = dict(
-size = 20,
-color = 'blue',
-line = dict(
-width = 2,
-)
-),
-text = ['Other', 'Other2', 'Other3']
+trace4
 )
 
 data = [trace_dance, trace_dance_top, trace_pitch, trace_pitch_top]

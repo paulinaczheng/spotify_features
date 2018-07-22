@@ -70,13 +70,6 @@ def avg_featurevalues_artist(artist, feature_names_list):
 def track_popularity():
     return {track.name: track.track_popularity for track in Track.query.all()}
 
-marker = marker = dict(
-        size = 20,
-        color = 'blue',
-        line = dict(
-            width = 2,
-        )
-    )
 def create_trace(artist, feature, title, marker):
     dict_values = [value for value in all_featurevalue_artist(artist)]
     popularity_dict = track_popularity()
