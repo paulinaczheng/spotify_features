@@ -85,6 +85,6 @@ def create_trace(artist, feature, title, marker):
     y = [dict['popularity'] for dict in feature_dict]
     text = [dict['name'] for dict in feature_dict]
     return dict(x=x, y=y, name=title, mode='markers', marker=marker, text=text)
-    
+
 all_track_artists = all_track_names_artist()
 feature_names_list = feature_names()
