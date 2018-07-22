@@ -1,4 +1,4 @@
-from api_artists_genres import *
+from spotify_package.api_artists_genres import *
 
 #function get list of API's to call for each artist's top tracks
 def url_artist_top_tracks():
@@ -14,6 +14,7 @@ def top_tracks_dict():
         list_dicts.extend(track_dict['tracks'])
     return list_dicts
 
+top_tracks_dict = top_tracks_dict()
 # track_artist_dict = track_artists(data, song_id)
 #Get artist top tracks
 all_track_ids = []
@@ -35,6 +36,7 @@ def check_top_track(top_tracks, spotify_id):
     else:
         return False
 
+top_tracks = artist_top_tracks(top_tracks_dict)
 #create dictionary of albums and frequency, returning top 2
 def album_freq(all_album_ids):
     album_freq_dict = [{'id': album, 'freq': all_album_ids.count(album)} for album in set(all_album_ids)]
@@ -54,12 +56,7 @@ albums_clean = [album for album in albums_raw['albums']]
 #dictionary with keys as Album name and values as list of tracks
 album_tracks_dict = {album['name']:album['tracks'] for album in albums_clean}
 
-#Get album tracks
-def albums(albums_clean):
-    for album in albums_clean:
-        all_albums.append(Album(spotify_id=album['id'], name=album['name'], release_date=album['release_date']))
-    return all_albums
-
+all_albums = []
 def list_all_tracks():
     all_song_id_list = []
     for track in album_tracks_dict.values():
@@ -67,17 +64,3 @@ def list_all_tracks():
         all_song_id_list.extend(song_ids_per_album)
     all_track_ids.extend(all_song_id_list)
     return list(set(all_track_ids))
-
-
-#Top Tracks and Albums
-def add_albums(all_albums):
-    for album in all_albums:
-        db.session.add(album)
-        db.session.commit()
-
-top_tracks_dict = top_tracks_dict()
-top_tracks = artist_top_tracks(top_tracks_dict)
-sorted_album_freq = album_freq(all_album_ids)
-all_albums = []
-albums(albums_clean)
-add_albums(all_albums)

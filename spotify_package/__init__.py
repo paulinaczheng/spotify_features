@@ -15,4 +15,4 @@ app = dash.Dash(__name__, server=server, url_base_pathname = '/')
 
 # from spotify_package import routes
 # from spotify_package.seed import *
-from dashboard import app
+from spotify_package.dashboard import app

@@ -1,5 +1,5 @@
-from config import *
-from models import *
+from spotify_package.config import *
+from spotify_package.models import *
 #function to format all artist id's properly for API
 def url_of_artist_ids():
     x=[id for id in dict_of_ids.values()]
@@ -34,29 +34,4 @@ def find_or_create_genre(genre_name):
         if genre_name == item.name:
             return item
 
-#Get Several Artists
-def artist(data):
-    for item in data:
-        name = item['name']
-        spotify_id = item['id']
-        popularity = item['popularity']
-        followers = item['followers']['total']
-        genre_name = genre_artist(spotify_id)
-        genre = find_or_create_genre(genre_name)
-        all_artists.append(Artist(spotify_id=spotify_id, name=name, artist_popularity=popularity, followers=followers, genre = genre))
-    return all_artists
-
-def add_artists(all_artists):
-    for artist in all_artists:
-        db.session.add(artist)
-        db.session.commit()
-
-def add_genres(all_genres):
-    for genre in all_genres:
-        db.session.add(genre)
-        db.session.commit()
-
 all_artists = []
-artist(artists_clean)
-add_artists(all_artists)
-add_genres(all_genres)

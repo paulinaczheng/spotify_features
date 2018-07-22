@@ -1,4 +1,5 @@
-from api_track_features import *
+from spotify_package.api_track_features import *
+from collections import defaultdict
 
 #converts artist object to artist name
 for artist in Artist.query.all():
@@ -54,8 +55,36 @@ def feature_names():
 def avg_featurevalues_artist(artist, feature_names_list):
     return {feature: feature_values_average(feature, artist) for feature in feature_names_list}
 
-def track_popularity(all_track_objs):
-    return [{track.name: track.track_popularity} for track in Track.query.all()]
+def avg_featurevalues_artist(artist, feature_names_list):
+    return {feature: feature_values_average(feature, artist) for feature in feature_names_list}
 
-def create_trace():
-    pass
+# def test():
+#     dict_values = [value for value in all_featurevalue_artist(artist)]
+#     for item in dict_values:
+#         for k, v in item.items():
+#             for track in Track.query.all():
+#                 if track.name == k:
+#                     v.append(('popularity', track.track_popularity))
+#     return dict_values
+
+def track_popularity():
+    return {track.name: track.track_popularity for track in Track.query.all()}
+
+marker = marker = dict(
+        size = 20,
+        color = 'blue',
+        line = dict(
+            width = 2,
+        )
+    )
+def create_trace(artist, feature, title, marker):
+    dict_values = [value for value in all_featurevalue_artist(artist)]
+    popularity_dict = track_popularity()
+    feature_dict = [{'name': key, feature:tuple[1], 'popularity': popularity_dict[key]} for item in dict_values for key,value in item.items() for tuple in value if tuple[0] == feature]
+    x = [dict[feature] for dict in feature_dict]
+    y = [dict['popularity'] for dict in feature_dict]
+    text = [dict['name'] for dict in feature_dict]
+    return dict(x=x, y=y, name=title, mode='markers', marker=marker, text=text)
+    
+all_track_artists = all_track_names_artist()
+feature_names_list = feature_names()

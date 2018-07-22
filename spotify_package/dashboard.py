@@ -1,6 +1,6 @@
 import dash_core_components as dcc
 import dash_html_components as html
-from __init__ import app
+from spotify_package import app
 # from spotify_package.spotify_data import data
 
 app.layout = html.Div(children = html.H1("Welcome"))
