@@ -126,7 +126,7 @@ def list_of_traces(artist):
     return final_trace_list
 
 def list_of_artists_for_dropdown():
-    options = [{'label': 'All Artists', 'value': 'all_artists'}]
+    options = [{'label': 'Artist Options', 'value': 'all_artists'}]
     artist_list = [artist.name for artist in Artist.query.all()]
     for artist in artist_list:
         options.append({'label': artist, 'value': artist})

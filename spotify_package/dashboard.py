@@ -10,9 +10,15 @@ import dash
 from dash.dependencies import Input, Output
 
 app.layout = html.Div(children= [
+dcc.Dropdown(
+# id='select-plot'
+# options=[
+# {'label': 'Track Features by Artist', 'value': 'scatter'},
+# {'label': }]
+# ),
  dcc.Dropdown(
         id='select-artist',
-        options=list_of_artists_for_dropdown(), value='all_artists'),
+        options=list_of_artists_for_dropdown(), placeholder='Select an artist', value='all_artists'),
 html.H1('Artist Features Plot'),
 html.Div(id='plot-container')])
 
