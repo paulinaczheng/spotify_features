@@ -1,4 +1,6 @@
-from spotify_package.api_track_features import *
+from spotify_package.models import *
+from spotify_package.dashboard import *
+
 #converts artist object to artist name
 for artist in Artist.query.all():
     if artist.name == 'Migos':
@@ -50,7 +52,7 @@ def all_featurevalue_artist(artist, top_track=False):
 def feature_values_average(feature, artist):
     dict_values = [value for value in all_featurevalue_artist(artist)]
     feature_values_list = [tup[1] for item in dict_values for value in item.values() for tup in value if tup[0] == feature]
-    return sum(feature_values_list)/len(feature_values_list)
+    return round(sum(feature_values_list)/len(feature_values_list), 2)
 
 def feature_names():
     return [feature.name for feature in Feature.query.all()]
@@ -69,6 +71,22 @@ def avg_featurevalues_artist(artist, feature_names_list):
 #                 if track.name == k:
 #                     v.append(('popularity', track.track_popularity))
 #     return dict_values
+
+def tempo_normalization(val):
+    tempo_id = [feature.id for feature in Feature.query.all() if feature.name == 'tempo'][0]
+    tempo_values = [tf.value for tf in TrackFeature.query.all() if tf.feature_id == tempo_id]
+    min_val = min(tempo_values)
+    max_val = max(tempo_values)
+    # return [round(((val-min_val)/(max_val-min_val)),2) for val in tempo_values]
+    tempo_val = round(((val-min_val)/(max_val-min_val)),2)
+    return tempo_val
+
+def tempo_normalization_list(tracks_list):
+    for dict in tracks_list:
+        if 'tempo' in dict['name']:
+            for val in dict['x']:
+                dict['x'][dict['x'].index(val)] = tempo_normalization(val)
+    return tracks_list
 
 def track_popularity():
     return {track.name: track.track_popularity for track in Track.query.all()}
@@ -91,22 +109,27 @@ color = 'blue',
 line = dict(
 width = 2,))
 
-def top_track_title(artist, feature):
-    return artist + ' ' + 'Top Tracks by ' + feature
+def top_track_title(feature):
+    return 'Top Tracks by ' + feature.capitalize()
 
-def oth_track_title(artist, feature):
-    return artist + ' ' + 'Other Tracks by ' + feature
+def oth_track_title(feature):
+    return 'Other Tracks by ' + feature.capitalize()
 
-def list_of_traces(artist_name):
+def list_of_traces(artist):
     top_track_trace_list = []
     oth_track_trace_list = []
-    artist_names = [artist.name for artist in Artist.query.all() if artist.name == artist_name]
     feature_names = [feature.name for feature in Feature.query.all()]
-    for artist in artist_names:
-        for feature in feature_names:
-            top_track_name = top_track_title(artist, feature)
-            oth_track_name = oth_track_title(artist, feature)
-            top_track_trace_list.append(create_trace(artist, feature, top_track_name , marker1, top_track=True))
-            oth_track_trace_list.append(create_trace(artist, feature, oth_track_name, marker2))
+    for feature in feature_names:
+        top_track_name = top_track_title(artist)
+        oth_track_name = oth_track_title(artist)
+        top_track_trace_list.append(create_trace(artist, feature, top_track_name , marker1, top_track=True))
+        oth_track_trace_list.append(create_trace(artist, feature, oth_track_name, marker2))
     final_trace_list = [top_track_trace_list, oth_track_trace_list]
     return final_trace_list
+
+def list_of_artists_for_dropdown():
+    options = [{'label': 'Artist', 'value': 'Artist'}]
+    artist_list = [artist.name for artist in Artist.query.all()]
+    for artist in artist_list:
+        options.append({'label': artist, 'value': artist})
+    return options

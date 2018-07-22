@@ -12,25 +12,24 @@ color = 'blue',
 line = dict(
 width = 2,))
 
-trace1 = create_trace('Charlie Puth', 'danceability', 'Puth top tracks danceability', marker1, top_track=True)
-trace2 = create_trace('Charlie Puth', 'danceability', 'Puth other tracks danceability', marker2)
-trace3 = create_trace('Charlie Puth', 'valence', 'Puth top tracks valence', marker1, top_track=True)
-trace4 = create_trace('Charlie Puth', 'valence', 'Puth other tracks valence', marker2)
-trace_dance_top = go.Scatter(
-trace1)
-
-trace_dance = go.Scatter(
-trace2
-)
-trace_pitch_top = go.Scatter(
-trace3
-)
-
-trace_pitch = go.Scatter(
-trace4
-)
-
-data = [trace_dance, trace_dance_top, trace_pitch, trace_pitch_top]
+# top_tracks = list_of_traces('Charlie Puth')[0]
+# oth_tracks = list_of_traces('Charlie Puth')[1]
+#
+# trace_dance_top = go.Scatter(
+# trace1)
+#
+# trace_dance = go.Scatter(
+# trace2
+# )
+# trace_pitch_top = go.Scatter(
+# trace3
+# )
+#
+# trace_pitch = go.Scatter(
+# trace4
+# )
+#
+# top_tracks = [trace_dance, trace_dance_top, trace_pitch, trace_pitch_top]
 
 # high_annotations=[dict(x='2016-03-01',
 #                        y=df.High.mean(),
@@ -57,17 +56,29 @@ updatemenus = list([
 dict(type="buttons",
 active=-1,
 buttons=list([
-dict(label = 'Dance',
+dict(label = 'Danceability',
  method = 'update',
- args = [{'visible': [True, True, False, False]},
-         {'title': 'Tracks by Dance Measure'}]),
-dict(label = 'Pitch',
+ args = [{'visible': [True, False, False, False, False]},
+         {'title': 'Tracks by Danceability'}]),
+dict(label = 'Energy',
  method = 'update',
- args = [{'visible': [False, False, True, True]},
-         {'title': 'Tracks by Pitch Measure'}]),
+ args = [{'visible': [False, True, False, False, False]},
+         {'title': 'Tracks by Energy'}]),
+dict(label = 'Acousticness',
+ method = 'update',
+ args = [{'visible': [False, False, True, False, False]},
+         {'title': 'Tracks by Acousticness'}]),
+dict(label = 'Valence',
+ method = 'update',
+ args = [{'visible': [False, False, False, True, False]},
+         {'title': 'Tracks by Valence'}]),
+dict(label = 'Tempo',
+ method = 'update',
+ args = [{'visible': [False, False, False, False, True]},
+         {'title': 'Tracks by Tempo'}]),
 dict(label = 'All',
  method = 'update',
- args = [{'visible': [True, True, True, True]},
+ args = [{'visible': [True, True, True, True, True]},
          {'title': 'All Measures'}])]),
 #     # direction = 'down',
 # x = 0,

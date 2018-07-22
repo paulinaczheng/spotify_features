@@ -20,11 +20,8 @@ def features_dict():
         features_dicts.extend(track_features['audio_features'])
     return features_dicts
 
-
-
-
 all_features_dict = features_dict()
-feature_list = ['danceability', 'energy', 'key', 'loudness', 'mode', 'speechiness', 'acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo']
+feature_list = ['danceability', 'energy', 'acousticness', 'valence', 'tempo']
 all_features = []
 
 
