@@ -5,7 +5,7 @@ import json
 dict_of_ids = {'marshmello':"64KEffDW9EtZ1y2vBYgq8T", 'pluth':"6VuMaDnrHyPL1p4EHjYLi7",'migos':"6oMuImdp5ZcFhWP0ESe6mG",'mj':"3fMbdgg4jU18AjLCKBhRSm", 'biggie':"5me0Irg2ANcsgc93uaYrpb",'crow':"4TKTii6gnOnUXQHyuo9JaD",'aerosmith':'7Ey4PD4MYsKc5I2dolUwbH'}
 
 #Key for api's
-api_key = "BQDIS1_BjeFxVaVWwA_9uo9fnEV6WF2ytYBMfYX60pEMLZUNrdagbjkBHqcS4_OC7wbTWUqm9BAtqkQISkdGCSsZzaweStkhUWqUHeJFrgzCHZCf6xenZtDBAzww7pCvqzul5r2mfg"
+api_key = "BQBjvGZdwFwlA4ltlq9iM0o2tRtqg5YhTg0lkXVJSKPFBiAV0uCS4KlRKZfdwUA5WjprzTb8X94fyxTDhScXr_LQVgQ8qqFmVbyn8GCqxJynrgWLMZQ8uNewQoO63IZAq0FtDpixNw"
 #Headers for Spotify API
 headers = {'Accept': 'application/json',
 'Content-Type': 'application/json',

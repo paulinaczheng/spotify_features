@@ -112,7 +112,7 @@ def create_trace(artist, feature, title, marker, top_track=False):
     if top_track == True:
         opacity = 1.0
     else:
-        opacity = 0.4
+        opacity = 0.5
     return dict(x=x, y=y, name=title, mode='markers', marker=marker, opacity=opacity, text=text)
 
 def top_track_title(feature):
