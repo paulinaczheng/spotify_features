@@ -9,24 +9,43 @@ import json
 import dash
 from dash.dependencies import Input, Output
 
-app.layout = html.Div(children= [
-dcc.Dropdown(
-# id='select-plot'
-# options=[
-# {'label': 'Track Features by Artist', 'value': 'scatter'},
-# {'label': }]
-# ),
+# app.layout = html.Div(children= [
+# # dcc.Dropdown(
+# # id='select-plot',
+# # options=
+# # [{'label': 'Average Feature Values', 'value': 'bar'},
+# # {'label': 'Track Features by Artist', 'value': 'scatter'}],
+# # placeholder='Select a plot',
+# # ),
+
+# html.H1('Artist Features Plot'),
+# html.Div(id='plot-container')])
+
+app.layout = html.Div(children=[
+# html.H1(dcc.Graph(id = 'uber_pricing_graph', figure = {'data': [
+# {'name': 'Feature Averages for Charlie Puth', 'x': ['danceability', 'energy', 'acousticness', 'valence', 'tempo'],
+# 'y': [0.64, 0.58, 0.46, 0.59, 119.14], 'type': 'bar'}
+# ], 'layout': {'title': 'Uber Pricing in Brooklyn and Manhattan'}}
+# )),
  dcc.Dropdown(
         id='select-artist',
-        options=list_of_artists_for_dropdown(), placeholder='Select an artist', value='all_artists'),
-html.H1('Artist Features Plot'),
-html.Div(id='plot-container')])
+        options=list_of_artists_for_dropdown(), placeholder='Select an artist',
+        value='all_artists'),
+html.Div(id='plot-container')
+])
 
-def generate_plot(plot_data):
+def generate_scatter(scatter_data):
     return dcc.Graph(id = 'artist_features',
     figure = {
-    'data': plot_data,
-    'layout': {'title' :  'Artist Features', 'updatemenus': updatemenus}})
+    'data': scatter_data,
+    'layout': {'title' :  'Artist Tracks by Feature', 'updatemenus': updatemenus}})
+
+def generate_bar(bar_data):
+        return html.H1(dcc.Graph(id = 'artist_avg_features',
+    figure = {
+    'data': bar_data,
+    'layout': {'title': 'Average Artist Features'}
+    }))
 
 # def generate_table(table_data):
 #     return html.Table(id='artist-avg-table', children=
@@ -42,8 +61,18 @@ def generate_plot(plot_data):
 @app.callback(
     Output(component_id='plot-container', component_property='children'),
     [Input(component_id='select-artist', component_property='value')])
-def filter_plot(input_value):
-    global data
+def filter_bar(input_value):
+    global final_bar_data
+    feature_values = avg_featurevalues_artist(input_value)
+    x = [feature for feature in feature_values.keys()]
+    y = [avg for avg in feature_values.values()]
+    title = 'Feature Averages for ' + input_value
+    final_bar_data = {'name': title, 'x': x, 'y': y, 'type': 'bar'}
+    return generate_bar(final_bar_data)
+    # return final_bar_data
+
+def filter_scatter(input_value):
+    global scatter_data
     # if input_value == 'all_artists':
     #     data = []
     #     for artist in [artist.name for artist in Artist.query.all()]:
@@ -56,8 +85,8 @@ def filter_plot(input_value):
     trace_list = list_of_traces(input_value)
     top_tracks = tempo_normalization_list(trace_list[0])
     oth_tracks = tempo_normalization_list(trace_list[1])
-    data = top_tracks + oth_tracks
-    return generate_plot(data)
+    scatter_data = top_tracks + oth_tracks
+    return generate_scatter(scatter_data)
 
 # @app.callback(
 #     Output(component_id='container', component_property='children'),
@@ -66,3 +95,13 @@ def filter_plot(input_value):
 #     global tbl_fin_data
 #     tbl_fin_data = avg_featurevalues_artist(input_value)
 #     return generate_table(tbl_fin_data)
+#
+# @app.callback(
+#     Output(component_id='plot-container', component_property='children'),
+#     [Input(component_id='select-plot', component_property='value'),
+#     Input(component_id='select-artist', component_property='value')])
+# def return_plot(plot_value, artist_value):
+#     if plot_value == 'scatter':
+#         return filter_scatter(artist_value)
+#     elif plot_value == 'bar':
+#         return filter_bar(artist_value)
