@@ -131,3 +131,17 @@ def list_of_artists_for_dropdown():
     for artist in artist_list:
         options.append({'label': artist, 'value': artist})
     return options
+
+def bar_trace(artist):
+   avg_features = avg_featurevalues_artist(artist)
+   x = [feature for feature in avg_features.keys()]
+   y = [value for value in avg_features.values()]
+   y[4] = tempo_normalization(y[4])
+   return {'x': x, 'y': y, 'type': 'bar', 'name': artist}
+
+def all_bars():
+   all_bars_list = []
+   x = [artist.name for artist in Artist.query.all()]
+   for artist in x:
+       all_bars_list.append(bar_trace(artist))
+   return all_bars_list
