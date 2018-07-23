@@ -10,8 +10,8 @@ import dash
 from dash.dependencies import Input, Output
 
 app.layout = html.Div([
-    html.H1('Dash Tabs component demo', style={
-            'textAlign': 'center', 'margin': '48px 0', 'fontFamily': 'system-ui'}),
+    html.H1('Spotify Feature Analysis', style={
+            'textAlign': 'center', 'margin': '48px 0', 'fontFamily': 'Sans-Serif'}),
     dcc.Tabs(id="tabs", children=[
         dcc.Tab(label='Tab one', children=[
             html.Div([
@@ -35,13 +35,31 @@ html.Div(id= 'plot-container')
         ]),
         dcc.Tab(label='Tab three', children=[
             html.Div([
-                html.H1("This is the content in tab 3"),
+    dcc.Graph(
+       id='generation',
+       figure={
+           'data': data_box,'layout': go.Layout(
+               xaxis={'title': 'feature'},
+               yaxis={'title': 'feature value'},
+               boxmode='group',
+           )})
             ])
         ]),
+dcc.Tab(label='Tab four', children=[
+    html.Div([dcc.Graph(
+    id='my-graph',
+    figure=create_histogram()
+)
+    ])
+]),
     ],
         style={
-        'fontFamily': 'system-ui'
-    },
+    'width': '60%',
+    'fontFamily': 'Sans-Serif',
+    'margin-left': 'auto',
+    'margin-right': 'auto',
+    'float': 'left'
+},
         content_style={
         'borderLeft': '1px solid #d6d6d6',
         'borderRight': '1px solid #d6d6d6',

@@ -1,4 +1,5 @@
 from spotify_package.models import *
+import plotly.figure_factory as ff
 # from spotify_package.dashboard import *
 
 #converts artist object to artist name
@@ -158,3 +159,21 @@ def all_bars():
    for artist in x:
        all_bars_list.append(bar_trace(artist))
    return all_bars_list
+
+def features_values(feature,artist):
+   dict_values = [value for value in all_featurevalue_artist(artist)]
+   return [tup[1] for item in dict_values for value in item.values() for tup in value if tup[0] == feature]
+
+def create_histogram():
+    group_labels = feature_names()
+    artists = [artist.name for artist in Artist.query.all()]
+    hist = {feature: [feature_values_average(feature, artist) for artist in artists] for feature in group_labels}
+    for item in hist['tempo']:
+        hist['tempo'][hist['tempo'].index(item)] = tempo_normalization(item)
+    x1=hist['danceability']
+    x2=hist['energy']
+    x3=hist['acousticness']
+    x4=hist['valence']
+    x5=hist['tempo']
+    hist_data = [x1, x2, x3, x4, x5]
+    return ff.create_distplot(hist_data, group_labels, bin_size=.2)
