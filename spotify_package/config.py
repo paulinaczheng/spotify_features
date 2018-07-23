@@ -11,7 +11,7 @@ headers = {'Accept': 'application/json',
 'Content-Type': 'application/json',
 'Authorization': 'Bearer {}'.format(api_key)}
 
-pop_list = ["6VuMaDnrHyPL1p4EHjYLi7","3fMbdgg4jU18AjLCKBhRSm","4nDoRrQiYLoBzwC5BhVJzF",'66CXWjxzNUsdJxJ2JdwvnR']
+pop_list = ["6VuMaDnrHyPL1p4EHjYLi7","3fMbdgg4jU18AjLCKBhRSm"]
 hiphop_list = ["6oMuImdp5ZcFhWP0ESe6mG","5me0Irg2ANcsgc93uaYrpb"]
 rock_list = ['7Ey4PD4MYsKc5I2dolUwbH']
 country_list = ["4TKTii6gnOnUXQHyuo9JaD"]

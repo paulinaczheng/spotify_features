@@ -36,7 +36,7 @@ html.Div(id= 'plot-container'),
 dcc.Markdown('*Note: for all features, data for tempo normalized to 0-1 range*')
             ])
         ]),
-dcc.Tab(label='Artist Comparisons', children=[
+dcc.Tab(label='Genre Comparisons', children=[
           html.Div([
 dcc.Dropdown(
          id='select-genre',
