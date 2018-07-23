@@ -15,3 +15,10 @@ pop_list = ["6VuMaDnrHyPL1p4EHjYLi7","3fMbdgg4jU18AjLCKBhRSm","4nDoRrQiYLoBzwC5B
 hiphop_list = ["6oMuImdp5ZcFhWP0ESe6mG","5me0Irg2ANcsgc93uaYrpb"]
 rock_list = ['7Ey4PD4MYsKc5I2dolUwbH']
 country_list = ["4TKTii6gnOnUXQHyuo9JaD"]
+
+# carrie underwood = 4xFUf1FHVy696Q1JQZMTRj
+# bee gees = 1LZEQNv7sE11VDY3SdxQeN
+# fall out = 4UXqAaa6dQYAk18Lv7PEgX
+# bee gees album id = 3WW11Jf3O3lfFRF5wNMqkn
+# carrie album id = 3iLrVuA1k7onNmZTuUQH4u
+# fall out album = 6KOWjVP0mh5rOqmzm4tkPD
