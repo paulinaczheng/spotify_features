@@ -160,9 +160,35 @@ def all_bars():
        all_bars_list.append(bar_trace(artist))
    return all_bars_list
 
-def features_values(feature,artist):
-   dict_values = [value for value in all_featurevalue_artist(artist)]
-   return [tup[1] for item in dict_values for value in item.values() for tup in value if tup[0] == feature]
+def genres_artists(genre_input):
+    artists_genre = [genre.artists for genre in Genre.query.all() if genre.name == genre_input][0]
+    dict_values = []
+    for artist in artists_genre:
+        dict_values.append(all_featurevalue_artist(artist.name, top_track = True))
+    return dict_values
+
+def box_y_values(genre_input):
+    artist_dict = [artists_dict for artists_dict in genres_artists(genre_input)]
+    values_only = [feature[1] for artist in artist_dict[0] for track in artist.values() for feature in track]
+    for value in values_only:
+        if value > 10:
+            values_only[values_only.index(value)] = tempo_normalization(value)
+            second_value_list = [feature[1] for artist in artist_dict[1] for track in artist.values() for feature in track]
+    for second_value in second_value_list:
+        if second_value > 10:
+            second_value_list[second_value_list.index(second_value)] = tempo_normalization(second_value)
+    final = [values_only] + [second_value_list]
+    return final
+
+def box_x_values(genre_input):
+    features = ['danceability', 'energy', 'acousticness', 'valence', 'tempo']
+    list_features = [feature for feature in features]
+    return int((len(box_y_values(genre_input)[0])/5)) * list_features
+
+def genres_names_box(genre_input):
+    artists_genre = [genre.artists for genre in Genre.query.all() if genre.name == genre_input][0]
+    names = [artist.name for artist in artists_genre]
+    return names
 
 # def create_histogram():
 #     group_labels = feature_names()
@@ -203,4 +229,3 @@ def create_histogram():
     x4=hist['tempo']
     hist_data = [x1, x2, x3, x4]
     return ff.create_distplot(hist_data, group_labels, bin_size=.03)
-    return hist

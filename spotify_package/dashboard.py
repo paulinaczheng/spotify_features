@@ -33,18 +33,17 @@ dcc.Dropdown(
 html.Div(id= 'plot-container')
             ])
         ]),
-        dcc.Tab(label='Artists Comparison', children=[
-            html.Div([
-    dcc.Graph(
-       id='generation',
-       figure={
-           'data': data_box,'layout': go.Layout(
-               xaxis={'title': 'feature'},
-               yaxis={'title': 'feature value'},
-               boxmode='group',
-           )})
-            ])
-        ]),
+dcc.Tab(label='Artist Comparisons', children=[
+          html.Div([
+dcc.Dropdown(
+         id='select-genre',
+         options=[{'label': 'Hip-Hop', 'value': 'hiphop'},
+           {'label': 'Pop', 'value': 'pop'}],
+         placeholder="Select a Genre", value ='Genre'
+     ),
+html.Div(id= 'box-container')
+          ])
+      ]),
         dcc.Tab(label='Feature Distribution', children=[
             html.Div([
 html.H1('Distribution Plot'),dcc.Graph(
@@ -72,8 +71,6 @@ html.H1('Distribution Plot'),dcc.Graph(
     )
 ])
 
-
-
 def generate_scatter(scatter_data):
     return dcc.Graph(id = 'artist_features',
     figure = {
@@ -90,3 +87,22 @@ def filter_scatter(input_value):
     oth_tracks = tempo_normalization_list(trace_list[1])
     scatter_data = top_tracks + oth_tracks
     return generate_scatter(scatter_data)
+
+def generate_box(box_data):
+   return dcc.Graph(
+   id='generation',
+   figure={
+   'data': box_data,'layout': go.Layout(
+      xaxis={'title': 'feature'},
+      yaxis={'title': 'feature value'},
+      boxmode='group',
+   )})
+
+@app.callback(Output(component_id = 'box-container', component_property ='children'),
+[Input(component_id = 'select-genre',component_property = 'value')]
+)
+def filter_box(input_value):
+   trace0 = go.Box(y=box_y_values(input_value)[0],x=box_x_values(input_value),name=genres_names_box(input_value)[0],marker=dict(color='#3D9970'))
+   trace1 = go.Box(y=box_y_values(input_value)[1],x=box_x_values(input_value),name=genres_names_box(input_value)[1],marker=dict(color='#FF4136'))
+   trace_list = [trace0, trace1]
+   return generate_box(trace_list)
