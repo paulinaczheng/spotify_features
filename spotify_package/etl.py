@@ -164,16 +164,43 @@ def features_values(feature,artist):
    dict_values = [value for value in all_featurevalue_artist(artist)]
    return [tup[1] for item in dict_values for value in item.values() for tup in value if tup[0] == feature]
 
+# def create_histogram():
+#     group_labels = feature_names()
+#     artists = [artist.name for artist in Artist.query.all()]
+#     hist = {feature: [feature_values_average(feature, artist) for artist in artists] for feature in group_labels}
+#     for item in hist['tempo']:
+#         hist['tempo'][hist['tempo'].index(item)] = tempo_normalization(item)
+#     x1=hist['danceability']
+#     x2=hist['energy']
+#     x3=hist['acousticness']
+#     x4=hist['valence']
+#     x5=hist['tempo']
+#     hist_data = [x1, x2, x3, x4, x5]
+#     return ff.create_distplot(hist_data, group_labels, bin_size=.04)
+
+def track_feature_values(track, feature):
+    trackfeatures = [trackfeature for trackfeature in TrackFeature.query.all()]
+    feature_id=feature.id
+    track_id=track.id
+    for trackfeature in trackfeatures:
+        if trackfeature.track_id == track_id and trackfeature.feature_id == feature_id:
+            return trackfeature.value
+
 def create_histogram():
-    group_labels = feature_names()
-    artists = [artist.name for artist in Artist.query.all()]
-    hist = {feature: [feature_values_average(feature, artist) for artist in artists] for feature in group_labels}
+    group_labels = [feature.name for feature in Feature.query.all() if feature.name != 'acousticness']
+    top_tracks = [track for track in Track.query.all() if track.top_track==True]
+    features = [feature for feature in Feature.query.all()]
+    hist = {'danceability': [], 'energy': [], 'acousticness': [], 'valence': [], 'tempo': []}
+    for feature in features:
+        for track in top_tracks:
+            hist[feature.name].append(track_feature_values(track, feature))
     for item in hist['tempo']:
         hist['tempo'][hist['tempo'].index(item)] = tempo_normalization(item)
     x1=hist['danceability']
     x2=hist['energy']
-    x3=hist['acousticness']
-    x4=hist['valence']
-    x5=hist['tempo']
-    hist_data = [x1, x2, x3, x4, x5]
-    return ff.create_distplot(hist_data, group_labels, bin_size=.2)
+    # x3=hist['acousticness']
+    x3=hist['valence']
+    x4=hist['tempo']
+    hist_data = [x1, x2, x3, x4]
+    return ff.create_distplot(hist_data, group_labels, bin_size=.03)
+    return hist

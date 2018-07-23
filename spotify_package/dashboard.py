@@ -13,17 +13,17 @@ app.layout = html.Div([
     html.H1('Spotify Feature Analysis', style={
             'textAlign': 'center', 'margin': '48px 0', 'fontFamily': 'Sans-Serif'}),
     dcc.Tabs(id="tabs", children=[
-        dcc.Tab(label='Tab one', children=[
+        dcc.Tab(label='Average Feature Values', children=[
             html.Div([
-html.H1('Artist Features Plot'),dcc.Graph(
+dcc.Graph(
        id='example-graph',
        figure={
            'data': all_bars(),
            'layout': {
-               'title': 'Average Feature Values'}})
+               'title': 'Average Feature Values by Artist'}})
             ])
         ]),
-        dcc.Tab(label='Tab two', children=[
+        dcc.Tab(label='Track Values by Feature', children=[
             html.Div([
 dcc.Dropdown(
            id='select-artist',
@@ -33,7 +33,7 @@ dcc.Dropdown(
 html.Div(id= 'plot-container')
             ])
         ]),
-        dcc.Tab(label='Tab three', children=[
+        dcc.Tab(label='Artists Comparison', children=[
             html.Div([
     dcc.Graph(
        id='generation',
@@ -45,20 +45,19 @@ html.Div(id= 'plot-container')
            )})
             ])
         ]),
-dcc.Tab(label='Tab four', children=[
-    html.Div([dcc.Graph(
-    id='my-graph',
-    figure=create_histogram()
-)
-    ])
-]),
-    ],
+        dcc.Tab(label='Feature Distribution', children=[
+            html.Div([
+html.H1('Distribution Plot'),dcc.Graph(
+       id='dist-plot',
+       figure=create_histogram())
+            ])
+        ])]
+,
         style={
-    'width': '60%',
+    'width': '80%',
     'fontFamily': 'Sans-Serif',
     'margin-left': 'auto',
     'margin-right': 'auto',
-    'float': 'left'
 },
         content_style={
         'borderLeft': '1px solid #d6d6d6',
@@ -73,11 +72,13 @@ dcc.Tab(label='Tab four', children=[
     )
 ])
 
+
+
 def generate_scatter(scatter_data):
     return dcc.Graph(id = 'artist_features',
     figure = {
     'data': scatter_data,
-    'layout': {'title' :  'Artist Tracks by Feature', 'updatemenus': updatemenus}})
+    'layout': {'title' : 'Artist Tracks by Feature', 'updatemenus': updatemenus}})
 
 @app.callback(Output(component_id = 'plot-container', component_property ='children'),
 [Input(component_id = 'select-artist',component_property = 'value' )]
