@@ -96,16 +96,45 @@ def create_trace(artist, feature, title, marker, top_track=False):
     x = [dict[feature] for dict in feature_dict]
     y = [dict['popularity'] for dict in feature_dict]
     text = [dict['name'] for dict in feature_dict]
-    return dict(x=x, y=y, name=title, mode='markers', marker=marker, text=text)
+    return dict(x=x, y=y, name=title, mode='markers', opacity=0.7, marker=marker, text=text)
+#
+# marker1 = dict(
+# size = 12,
+# color = 'red',)
+# marker2 = dict(
+# size = 12,
+# color = 'blue',
+# line = dict(
+# width = 2,))
+# marker3 = dict(
+# size = 12,
+# color = 'green',
+# line = dict(
+# width = 2,))
+# marker4 = dict(
+# size = 12,
+# color = 'purple',
+# line = dict(
+# width = 2,))
+# marker5 = dict(
+# size = 12,
+# color = 'orange',
+# line = dict(
+# width = 2,))
 
-marker1 = dict(
-size = 16,
-color = 'green',)
-marker2 = dict(
-size = 16,
-color = 'blue',
-line = dict(
-width = 2,))
+def marker_color(feature):
+    if feature == 'danceability':
+        color = 'red'
+    elif feature == 'energy':
+        color = 'blue'
+    elif feature == 'acousticness':
+        color = 'green'
+    elif feature == 'valence':
+        color = 'purple'
+    elif feature == 'tempo':
+        color = 'orange'
+    return color
+
 
 def top_track_title(feature):
     return 'Top Tracks by ' + feature
@@ -118,10 +147,12 @@ def list_of_traces(artist):
     oth_track_trace_list = []
     feature_names = [feature.name for feature in Feature.query.all()]
     for feature in feature_names:
+        color = marker_color(feature)
+        marker = dict(size = 12, color = color,line = dict(width = 2,))
         top_track_name = top_track_title(feature)
         oth_track_name = oth_track_title(feature)
-        top_track_trace_list.append(create_trace(artist, feature, top_track_name , marker1, top_track=True))
-        oth_track_trace_list.append(create_trace(artist, feature, oth_track_name, marker2))
+        top_track_trace_list.append(create_trace(artist, feature, top_track_name, marker, top_track=True))
+        oth_track_trace_list.append(create_trace(artist, feature, oth_track_name, marker))
     final_trace_list = [top_track_trace_list, oth_track_trace_list]
     return final_trace_list
 
