@@ -1,4 +1,4 @@
-# from spotify_package.api_track_features import *
+# from api_track_features import *
 #
 # # Artists and Genres
 # # Get Several Artists
@@ -32,7 +32,9 @@
 # #Get album tracks
 # def albums(albums_clean):
 #     for album in albums_clean:
-#         all_albums.append(Album(spotify_id=album['id'], name=album['name'], release_date=album['release_date']))
+#         artist = [artist for artist in all_artists if artist.spotify_id == album['artists'][0]['id']][0]
+#         artist_id = artist.id
+#         all_albums.append(Album(spotify_id=album['id'], name=album['name'], release_date=album['release_date'], artist = artist, artist_id = artist_id))
 #     return all_albums
 #
 # def add_albums(all_albums):
@@ -66,7 +68,6 @@
 #         db.session.add(track)
 #         db.session.commit()
 #
-# songs_with_feat_artist = track_feature(song_name_artists)
 # track_objects(final_all_tracks, track_artist, all_artists)
 # add_track_objects(all_track_objs)
 #
@@ -103,6 +104,5 @@
 #
 # feature_objs(feature_list)
 # add_features(all_features)
-#
 # track_features(all_features, all_features_dict, all_track_objs, feature_list)
 # add_track_features(track_features_list)

@@ -8,6 +8,8 @@ def url_of_track_ids(a,b):
     return list_of_apis
 url_of_track_ids(0,50)
 url_of_track_ids(50,100)
+url_of_track_ids(100,150)
+url_of_track_ids(150,200)
 
 #to call API for all tracks
 final_all_tracks = []
@@ -30,6 +32,8 @@ def track_feature(song_name_artists):
             songs_with_feat_artist.append(key)
         track_artist.append((key, value[0]))
     return songs_with_feat_artist
+
+songs_with_feat_artist = track_feature(song_name_artists)
 
 def check_featured_artist(songs_with_feat_artist, spotify_id):
     for track in songs_with_feat_artist:

@@ -1,5 +1,5 @@
 from spotify_package.models import *
-from spotify_package.dashboard import *
+# from spotify_package.dashboard import *
 
 #converts artist object to artist name
 for artist in Artist.query.all():
@@ -89,39 +89,6 @@ def tempo_normalization_list(tracks_list):
 def track_popularity():
     return {track.name: track.track_popularity for track in Track.query.all()}
 
-def create_trace(artist, feature, title, marker, top_track=False):
-    dict_values = [value for value in all_featurevalue_artist(artist, top_track)]
-    popularity_dict = track_popularity()
-    feature_dict = [{'name': key, feature:tuple[1], 'popularity': popularity_dict[key]} for item in dict_values for key,value in item.items() for tuple in value if tuple[0] == feature]
-    x = [dict[feature] for dict in feature_dict]
-    y = [dict['popularity'] for dict in feature_dict]
-    text = [dict['name'] for dict in feature_dict]
-    return dict(x=x, y=y, name=title, mode='markers', opacity=0.7, marker=marker, text=text)
-#
-# marker1 = dict(
-# size = 12,
-# color = 'red',)
-# marker2 = dict(
-# size = 12,
-# color = 'blue',
-# line = dict(
-# width = 2,))
-# marker3 = dict(
-# size = 12,
-# color = 'green',
-# line = dict(
-# width = 2,))
-# marker4 = dict(
-# size = 12,
-# color = 'purple',
-# line = dict(
-# width = 2,))
-# marker5 = dict(
-# size = 12,
-# color = 'orange',
-# line = dict(
-# width = 2,))
-
 def marker_color(feature):
     if feature == 'danceability':
         color = 'red'
@@ -135,6 +102,18 @@ def marker_color(feature):
         color = 'orange'
     return color
 
+def create_trace(artist, feature, title, marker, top_track=False):
+    dict_values = [value for value in all_featurevalue_artist(artist, top_track)]
+    popularity_dict = track_popularity()
+    feature_dict = [{'name': key, feature:tuple[1], 'popularity': popularity_dict[key]} for item in dict_values for key,value in item.items() for tuple in value if tuple[0] == feature]
+    x = [dict[feature] for dict in feature_dict]
+    y = [dict['popularity'] for dict in feature_dict]
+    text = [dict['name'] for dict in feature_dict]
+    if top_track == True:
+        opacity = 1.0
+    else:
+        opacity = 0.4
+    return dict(x=x, y=y, name=title, mode='markers', marker=marker, opacity=opacity, text=text)
 
 def top_track_title(feature):
     return 'Top Tracks by ' + feature
@@ -148,11 +127,14 @@ def list_of_traces(artist):
     feature_names = [feature.name for feature in Feature.query.all()]
     for feature in feature_names:
         color = marker_color(feature)
-        marker = dict(size = 12, color = color,line = dict(width = 2,))
+        top_marker = dict(size = 12, color = color)
+        oth_marker = dict(size = 12, color = color, line = dict(
+              color = 'black',
+              width = 2))
         top_track_name = top_track_title(feature)
         oth_track_name = oth_track_title(feature)
-        top_track_trace_list.append(create_trace(artist, feature, top_track_name, marker, top_track=True))
-        oth_track_trace_list.append(create_trace(artist, feature, oth_track_name, marker))
+        top_track_trace_list.append(create_trace(artist, feature, top_track_name, top_marker, top_track=True))
+        oth_track_trace_list.append(create_trace(artist, feature, oth_track_name, oth_marker))
     final_trace_list = [top_track_trace_list, oth_track_trace_list]
     return final_trace_list
 

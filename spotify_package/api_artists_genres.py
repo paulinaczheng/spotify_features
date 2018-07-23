@@ -23,10 +23,14 @@ all_genres = get_all_genres()
 def genre_artist(spotify_id):
     if spotify_id == "64KEffDW9EtZ1y2vBYgq8T":
         genre = 'edm_dance'
-    elif spotify_id == "6VuMaDnrHyPL1p4EHjYLi7":
+    elif spotify_id in pop_list:
         genre = 'pop'
-    elif spotify_id == "6oMuImdp5ZcFhWP0ESe6mG":
+    elif spotify_id in hiphop_list:
         genre = 'hiphop'
+    elif spotify_id in country_list:
+        genre = 'country'
+    elif spotify_id in rock_list:
+        genre = 'rock'
     return genre
 
 def find_or_create_genre(genre_name):
