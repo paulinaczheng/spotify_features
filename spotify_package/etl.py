@@ -234,7 +234,7 @@ def create_histogram():
     return ff.create_distplot(hist_data, group_labels, bin_size=.03)
 
 histogram = create_histogram()
-histogram['layout'].update(title='Distribution of Feature Values Across Tracks')
+histogram['layout'].update(title='Distribution of Feature Values Across Top Tracks')
 
 def artist_box_y_values(artist_name):
     artist_obj = [artist for artist in Artist.query.all() if artist.name == artist_name][0]
