@@ -32,5 +32,11 @@ dict(label = 'All',
  args = [{'visible': [True, True, True, True, True]},
          {'title': 'All Measures'}])]),
 font = dict(size=12),
+        direction = 'left',
+        pad = {'r': 10, 't': 10},
+        x = 0.1,
+        xanchor = 'left',
+        y = 1.3,
+        yanchor = 'top'
 ),
 ])

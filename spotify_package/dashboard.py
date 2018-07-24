@@ -20,8 +20,9 @@ dcc.Graph(
        id='example-graph',
        figure={
            'data': all_bars(),
-           'layout': {
-               'title': 'Average Feature Values by Artist'}}),
+           'layout': go.Layout(
+               xaxis={'title': 'Feature'},
+               yaxis={'title': 'Avg Feature Value'})}),
 dcc.Markdown('*Note: data for tempo normalized to 0-1 range*')
             ])
         ]),
@@ -44,7 +45,7 @@ dcc.Dropdown(
            {'label': 'Pop', 'value': 'pop'},
            {'label': 'Rock', 'value': 'rock'},
            {'label': 'Country', 'value': 'country'},
-           {'label': 'EDM_Dance', 'value': 'edm_dance'}],
+           {'label': 'EDM/Dance', 'value': 'edm_dance'}],
          placeholder="Select a Genre", value ='Genre'
      ),
 html.Div(id= 'box-container'),
@@ -99,7 +100,8 @@ def generate_scatter(scatter_data):
     return dcc.Graph(id = 'artist_features',
     figure = {
     'data': scatter_data,
-    'layout': {'title' : 'Artist Tracks by Feature', 'updatemenus': updatemenus}})
+    'layout': go.Layout(updatemenus=updatemenus,
+    xaxis={'title': 'feature'}, yaxis={'title': 'popularity'})})
 
 @app.callback(Output(component_id = 'plot-container', component_property ='children'),
 [Input(component_id = 'select-artist',component_property = 'value' )]
@@ -145,7 +147,7 @@ def filter_box(input_value):
 Input(component_id = 'select-artist-2',component_property = 'value')]
 )
 def filter_artist_box(input_value, input_value_2):
-    trace0 = go.Box(y=artist_box_y_values(input_value),x=artist_box_x_values(input_value),name=input_value,marker=dict(color='blue'))
-    trace1 = go.Box(y=artist_box_y_values(input_value_2),x=artist_box_x_values(input_value_2),name=input_value_2,marker=dict(color='purple'))
+    trace0 = go.Box(y=artist_box_y_values(input_value),x=artist_box_x_values(input_value),name=input_value,marker=dict(color='purple'))
+    trace1 = go.Box(y=artist_box_y_values(input_value_2),x=artist_box_x_values(input_value_2),name=input_value_2,marker=dict(color='blue'))
     trace_list = [trace0, trace1]
     return generate_artist_box(trace_list)
