@@ -13,7 +13,7 @@ db = SQLAlchemy(server)
 
 app = dash.Dash(__name__, server=server, url_base_pathname = '/')
 
-# from spotify_package import routes
+from spotify_package import routes
 # from spotify_package.seed import *
 from spotify_package.dashboard import *
 # app.css.config.serve_locally = True
