@@ -11,11 +11,9 @@
 ## Dashboard
 A dashboard, with Dash as the front-end and Flask as the back-end, was built to display visualizations. 
 
-![header](images/artist_comp.png)
+![header](images/avg_features.png)
 
 ![header](images/artist_track_features.png)
-
-![header](images/avg_features.png)
 
 ![header](images/feature_dist.png)
 
@@ -27,5 +25,6 @@ A dashboard, with Dash as the front-end and Flask as the back-end, was built to 
 
 ![header](images/pop_comp.png)
 
+![header](images/artist_comp.png)
 
 
