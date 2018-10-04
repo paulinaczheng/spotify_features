@@ -1,7 +1,7 @@
 # Visualization & Evaluation of Artists and Tracks on Spotify
 
 ## Project Motivation
-The purpose of this project was to understand the characteristics of artists and tracks that are representative of their genres.
+The purpose of this project was to understand the characteristics of artists and tracks that are representative of their genres. The Spotify API allows access to 
 
 ## ETL
 Due to the nature of the Spotify API (artist/album/track IDs must be specified in order to retrieve associated data), 8 artists from diverse genres were selected:
